@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context.xsd
+          http://www.springframework.org/schema/mvc
+          http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+
+    <!--全局扫描controller对象 并对添有注解的类实例化-->
+    <context:component-scan base-package="cn.duan.controller"/>
+    <!-- 中央调度器对所有返回视图解析器的处理，进行要访问的字符串拼接-->
+    <bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver" >
+        <property name="prefix" value="/WEB-INF/view/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--声明全局异常捕获器***实现HandlerExceptionResolver接口处理错误-->
+    <bean class="cn.duan.handler.HandlerException"/>
+    <!--加载静态资源-->
+    <mvc:resources mapping="/js/**" location="/js/"/>
+    <mvc:resources mapping="/css/**" location="/css/"/>
+    <mvc:resources mapping="/imgs/**" location="/imgs/"/>
+    <!--mvc拦截器HandlerInterceptor，拦截所有请求文件-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="cn.duan.interceptor.InterceptorHandler"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <!--声明注解驱动-->
+    <mvc:annotation-driven/>
+</beans>
